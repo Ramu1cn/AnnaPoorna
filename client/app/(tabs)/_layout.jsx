@@ -30,7 +30,7 @@ const TabsLayout = () => {
                     tabBarInactiveTintColor:"#CDCDE0",
                     tabBarStyle: {
                     backgroundColor:"#161622",
-                        borderTopWidth: 1,
+                        borderTopWidth: 0, // to keep border between screen and tab menu
                         borderTopColor: "#232533",
                         height:80
                     }
