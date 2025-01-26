@@ -15,7 +15,7 @@ const TabIcon = ({icon,color,name,focused}) =>{
                 className={"w-67 h-8"}
             />
             <Text className={`${focused} ? 'font-psemibold' : 'font-pregular' text-xs w-11`} style={{color:color}}>
-                {name}
+                {name === "Home"? `${"  "}Home`:name}
             </Text>
         </View>
     )
@@ -32,14 +32,16 @@ const TabsLayout = () => {
                     backgroundColor:"#161622",
                         borderTopWidth: 0, // to keep border between screen and tab menu
                         borderTopColor: "#232533",
-                        height:80
-                    }
+                        height:80,
+                    },
+                    keyboardHidesTabBar: true,
+
                 }}
             >
                 <Tabs.Screen
                   name="home"
                   options={{
-                      title:'Home',
+                      title:`${"  "}Home`,
                       headerShown:false,
                       tabBarIcon:({color,focused,}) =>(
                           <TabIcon

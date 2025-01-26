@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert , SafeAreaView} from 'react-native';
+import {View, Text, TextInput, TouchableOpacity, Alert, SafeAreaView, ScrollView} from 'react-native';
+import Toast from "react-native-toast-message";
+
 
 const Report = () => {
     const [problemText, setProblemText] = useState('');
@@ -33,10 +35,12 @@ const Report = () => {
 
     return (
         <SafeAreaView className="flex-1 p-4 bg-black-200 text-gray-100 h-full">
+            <ScrollView className={"w-full"}>
             <View className="bg-gray-600 p-4 rounded-2xl shadow-md mb-4 mt-14">
                 <Text className="text-lg font-semibold mb-2">Write Your Question ?</Text>
                 <TextInput
-                    className="border border-gray-300 rounded-lg p-2 text-base h-[150px]"
+                    className="border border-gray-300 rounded-lg p-2 text-base h-[150px] font-psemibold"
+
                     placeholder="Describe your questions?"
                     multiline
                     value={questionText}
@@ -53,7 +57,7 @@ const Report = () => {
             <View className="bg-gray-600 p-4 rounded-2xl shadow-md mb-4">
                 <Text className="text-lg font-semibold mb-2">Report a Problem</Text>
                 <TextInput
-                    className="border border-gray-300 rounded-lg p-2 text-base h-[150px]"
+                    className="border border-gray-300 rounded-lg p-2 text-base h-[150px] font-psemibold"
                     placeholder="Describe your problem..."
                     multiline
                     value={problemText}
@@ -61,7 +65,7 @@ const Report = () => {
                 />
                 <TouchableOpacity
                     onPress={handleReportProblem}
-                    className="bg-gray-800 p-3 rounded-xl mt-4"
+                    className="bg-black p-3 rounded-xl mt-4"
                 >
                     <Text className="text-white text-center text-base">Submit Problem</Text>
                 </TouchableOpacity>
@@ -73,6 +77,7 @@ const Report = () => {
             >
                 <Text className="text-white text-center text-lg">Delete Account</Text>
             </TouchableOpacity>
+            </ScrollView>
         </SafeAreaView>
     );
 };
