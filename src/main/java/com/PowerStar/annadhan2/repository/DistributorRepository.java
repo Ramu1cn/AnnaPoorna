@@ -11,4 +11,7 @@ import java.util.Optional;
 public interface DistributorRepository extends JpaRepository<Distributor, Long> {
 
     Optional<Distributor> findByUserName(String userName);
+
+    Optional<Distributor> findByUserNameAndPassword(String userName, String password);
+
 }

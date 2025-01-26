@@ -94,4 +94,10 @@ public class DonorServiceImpl implements DonorService {
             throw new RuntimeException("Donor with username '" + userName + "' not found");
         }
     }
+
+    @Override
+    public boolean validateDonor(String userName, String password) {
+        return donorRepository.findByUserNameAndPassword(userName, password).isPresent();
+
+    }
 }

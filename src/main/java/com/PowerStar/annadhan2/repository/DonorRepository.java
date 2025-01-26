@@ -10,4 +10,8 @@ import java.util.Optional;
 public interface DonorRepository extends JpaRepository<Donor, Long> {
 
     Optional<Donor> findByUserName(String userName);
+
+    Optional<Donor> findByUserNameAndPassword(String userName, String password);
+
+
 }

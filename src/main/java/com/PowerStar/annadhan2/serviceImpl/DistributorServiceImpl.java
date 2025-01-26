@@ -60,5 +60,12 @@ public class DistributorServiceImpl implements DistributorService {
         return DistributorToDistributorDto(distributor);
     }
 
+    @Override
+    public boolean validateDistributor(String userName, String password) {
+
+            return distributorRepository.findByUserNameAndPassword(userName, password).isPresent();
+
+    }
+
 
 }
