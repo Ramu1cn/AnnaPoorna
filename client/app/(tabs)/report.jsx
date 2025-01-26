@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {View, Text, TextInput, TouchableOpacity, Alert, SafeAreaView, ScrollView} from 'react-native';
 import Toast from "react-native-toast-message";
 
+
 const Report = () => {
     const [problemText, setProblemText] = useState('');
     const [questionText, setQuestionText] = useState('');
@@ -39,6 +40,7 @@ const Report = () => {
                 <Text className="text-lg font-semibold mb-2">Write Your Question ?</Text>
                 <TextInput
                     className="border border-gray-300 rounded-lg p-2 text-base h-[150px] font-psemibold"
+
                     placeholder="Describe your questions?"
                     multiline
                     value={questionText}
