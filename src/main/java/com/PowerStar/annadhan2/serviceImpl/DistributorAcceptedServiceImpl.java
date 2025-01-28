@@ -8,6 +8,7 @@ import com.PowerStar.annadhan2.entity.Donation;
 import com.PowerStar.annadhan2.repository.DistributorAcceptedRepository;
 import com.PowerStar.annadhan2.repository.DistributorRepository;
 import com.PowerStar.annadhan2.service.DistributorAcceptedService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -71,4 +72,15 @@ public class DistributorAcceptedServiceImpl implements DistributorAcceptedServic
         List<DistributorAccepted> distributions = distributorAcceptedRepository.findByDistributorUserName(distributoruserName);
         return distributions;
     }
+
+    @Override
+    public void deleteDistributorAcceptedByDistributor(Distributor distributor) {
+        List<DistributorAccepted> distributorAccepteds = distributorAcceptedRepository.findByDistributor(distributor);
+        if (distributorAccepteds != null && !distributorAccepteds.isEmpty()) {
+            distributorAcceptedRepository.deleteAll(distributorAccepteds);
+        }
+    }
+
+
+
 }
