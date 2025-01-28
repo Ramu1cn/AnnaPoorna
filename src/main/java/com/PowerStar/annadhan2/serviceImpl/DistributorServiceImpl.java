@@ -5,18 +5,26 @@ import com.PowerStar.annadhan2.DTO.DonorDto;
 import com.PowerStar.annadhan2.entity.Distributor;
 import com.PowerStar.annadhan2.entity.Donor;
 import com.PowerStar.annadhan2.repository.DistributorRepository;
+import com.PowerStar.annadhan2.service.DistributorAcceptedService;
 import com.PowerStar.annadhan2.service.DistributorService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service("DistributorService")
 public class DistributorServiceImpl implements DistributorService {
 
-    @Autowired
+
     private DistributorRepository distributorRepository;
 
-    public DistributorServiceImpl(DistributorRepository distributorRepository) {
+    private DistributorAcceptedService distributorAcceptedService;
+
+    @Autowired
+    public DistributorServiceImpl(DistributorRepository distributorRepository, DistributorAcceptedService distributorAcceptedService) {
         this.distributorRepository = distributorRepository;
+        this.distributorAcceptedService = distributorAcceptedService;
     }
 
     private Distributor DonorDtoToDistributor(DonorDto donorDto){ //to receive data from JSON
@@ -66,6 +74,30 @@ public class DistributorServiceImpl implements DistributorService {
             return distributorRepository.findByUserNameAndPassword(userName, password).isPresent();
 
     }
+
+    @Override
+    public void deleteDistributorByUserName(String userName) {
+
+    }
+
+    @Override
+    public boolean deleteDistributorByUsernameAndPassword(String username, String password) {
+        Optional<Distributor> distributorOptional = distributorRepository.findByUserNameAndPassword(username, password);
+        if (distributorOptional.isPresent()) {
+            Distributor distributor = distributorOptional.get();
+
+            // Delete related donations first
+
+           // distributorAcceptedService.deleteDonationsByDonor(donor);
+            distributorAcceptedService.deleteDistributorAcceptedByDistributor(distributor);
+
+            // Now delete the donor
+            distributorRepository.delete(distributor);
+            return true;
+        }
+        return false;
+    }
+
 
 
 }
