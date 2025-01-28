@@ -10,6 +10,9 @@ public interface DonorService {
 
     public boolean validateDonor(String userName, String password);
 
+    public boolean deleteDonorByUsernameAndPassword(String username, String password);
+
+
 
 
 }

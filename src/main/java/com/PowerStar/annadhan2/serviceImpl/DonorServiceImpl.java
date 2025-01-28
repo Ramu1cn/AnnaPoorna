@@ -3,6 +3,7 @@ package com.PowerStar.annadhan2.serviceImpl;
 import com.PowerStar.annadhan2.DTO.DonorDto;
 import com.PowerStar.annadhan2.entity.Donor;
 import com.PowerStar.annadhan2.repository.DonorRepository;
+import com.PowerStar.annadhan2.service.DonationaService;
 import com.PowerStar.annadhan2.service.DonorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,8 +16,12 @@ public class DonorServiceImpl implements DonorService {
     @Autowired
     private DonorRepository donorRepository;
 
-    public DonorServiceImpl(DonorRepository donorRepository) {
+    private DonationaService donationaService;
+
+    @Autowired
+    public DonorServiceImpl(DonorRepository donorRepository, DonationaService donationaService) {
         this.donorRepository = donorRepository;
+        this.donationaService = donationaService;
     }
 
     private Donor DonorDtoToDonor(DonorDto donorDto){ //to receive data from JSON
@@ -100,4 +105,22 @@ public class DonorServiceImpl implements DonorService {
         return donorRepository.findByUserNameAndPassword(userName, password).isPresent();
 
     }
+
+    @Override
+    public boolean deleteDonorByUsernameAndPassword(String username, String password) {
+        Optional<Donor> donorOptional = donorRepository.findByUserNameAndPassword(username, password);
+        if (donorOptional.isPresent()) {
+            Donor donor = donorOptional.get();
+
+            // Delete related donations first
+            donationaService.deleteDonationsByDonor(donor);
+
+            // Now delete the donor
+            donorRepository.delete(donor);
+            return true;
+        }
+        return false;
+    }
+
+
 }

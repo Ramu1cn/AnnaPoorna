@@ -9,6 +9,7 @@ import com.PowerStar.annadhan2.repository.DonationRepository;
 import com.PowerStar.annadhan2.repository.DonorRepository;
 import com.PowerStar.annadhan2.service.DonationaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -19,14 +20,15 @@ public class DonationServiceImpl implements DonationaService {
 
 
     private DonationRepository donationRepository;
-    private DonorServiceImpl donorServiceimpl;
+//    @Lazy
+//    private DonorServiceImpl donorServiceimpl;
 
     private DonorRepository donorRepository;
 
     @Autowired
-    public DonationServiceImpl(DonationRepository donationRepository, DonorServiceImpl donorServiceimpl, DonorRepository donorRepository) {
+    public DonationServiceImpl(DonationRepository donationRepository/* DonorServiceImpl donorServiceimpl */, DonorRepository donorRepository) {
         this.donationRepository = donationRepository;
-        this.donorServiceimpl = donorServiceimpl;
+       // this.donorServiceimpl = donorServiceimpl;
         this.donorRepository = donorRepository;
     }
 
@@ -116,6 +118,11 @@ public class DonationServiceImpl implements DonationaService {
     }
 
 
-
+    public void deleteDonationsByDonor(Donor donor) {
+        List<Donation> donations = donationRepository.findByDonar(donor);
+        if (donations != null && !donations.isEmpty()) {
+            donationRepository.deleteAll(donations);
+        }
+    }
 
 }
