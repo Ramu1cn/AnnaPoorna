@@ -6,10 +6,12 @@ import {StatusBar} from "expo-status-bar";
 import {SafeAreaView} from "react-native-safe-area-context";
 import {images} from '../constants';
 import CustomButton from "../components/CustomButton";
+import {GlobalProvider} from "../context/GlobalProvider";
 
 export default function App() {
     // @ts-ignore
     return (
+        <GlobalProvider>
     <SafeAreaView className={"bg-primary h-full"}>
         <ScrollView contentContainerStyle={{height:'100%'}}>
             <View className={"w-full mt-4 items-center min-h-[85vh] px-4"}>
@@ -39,7 +41,6 @@ export default function App() {
 
                 <Text className={"text-sm font-pregular text-gray-100 mt-7 text-center"}>Loka
                     Samastaḥ, Sukhino Bhavantu – Let All Be Nourished and Happy.</Text>
-                <Link href={"/home"} className={"text-gray-100 font-pbold text-center text-3xl"}>Home</Link>
 
                 <CustomButton
                 title={"Continue with Email"}
@@ -51,5 +52,6 @@ export default function App() {
         <StatusBar backgroundColor={"#161622"} style={"light"} />
 
     </SafeAreaView>
+        </GlobalProvider>
   );
 }
