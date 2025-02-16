@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import {View, Text, StyleSheet, SafeAreaView, Image} from "react-native";
 import {images} from "../constants";
@@ -48,3 +49,4 @@ const DashBoardCard = ({ topLeft, topRight, bottomLeft, bottomRight }) => {
 };
 
 export default DashBoardCard;
+

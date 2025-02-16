@@ -5,6 +5,8 @@ import {images} from "../../constants";
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
 import {Link, router} from "expo-router";
+import axios from "axios";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignIn = () => {
     const [form, setForm] = useState(
@@ -17,23 +19,28 @@ const SignIn = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
 
-    const submit = ()=>{
+    const submit = async () => {
 
-        if(!form.email || !form.password){
+        if (!form.email || !form.password) {
 
-            Alert.alert("Error","Please fill all the fields.");
+            Alert.alert("Error", "Please fill all the fields.");
         }
 
         setIsSubmitting(true);
 
-        try{
+        try {
             // logic for api call to the backend
-           // 1:57:49 has the details to update it to globalContext details to remember user login
+            const response = await axios.post("http://10.25.73.87:8080/Signin", form);
+            console.log(response.data)
+            // 1:57:49 has the details to update it to globalContext details to remember user login
             // set it to global state
+            await AsyncStorage.setItem('email',form.email);
+            await AsyncStorage.setItem('password',form.password);
+
             router.replace("/home");
-        }catch(error){
-            Alert.alert("Error",error.message);
-        }finally{
+        } catch (error) {
+            Alert.alert("Error", error.message);
+        } finally {
             setIsSubmitting(false);
         }
     }
