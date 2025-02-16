@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import {View, Text, TextInput, ScrollView, Button, SafeAreaView, Image} from 'react-native';
 import ProfileCard from "../../components/ProfileCard";
@@ -77,5 +78,4 @@ const Profile = () => {
 };
 
 export default Profile;
-
 

@@ -4,6 +4,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {router} from "expo-router";
 
+
 const Report = () => {
     const [problemText, setProblemText] = useState('');
     const [questionText, setQuestionText] = useState('');
@@ -51,6 +52,7 @@ const Report = () => {
                 <Text className="text-lg font-semibold mb-2">Write Your Question ?</Text>
                 <TextInput
                     className="border border-gray-300 rounded-lg p-2 text-base h-[150px] font-psemibold"
+
                     placeholder="Describe your questions?"
                     multiline
                     value={questionText}
