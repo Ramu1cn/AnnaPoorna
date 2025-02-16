@@ -43,7 +43,7 @@ const SignUp = () => {
             setForm({...form , mobileNum: parseInt(form.mobileNum,10)})
             setForm({...form , pincode: parseInt(form.pincode,10)})
 
-            const response = await axios.post("http://10.25.73.87:8080/signup", form);
+            const response = await axios.post("http://10.25.91.116:8080/signup", form);
             if (response.status === 200) {
                 // set it to global state
                 router.replace("/sign-in");

@@ -1,8 +1,10 @@
 import {View, Text, Image} from 'react-native'
-import React from 'react'
+import React, {useState} from 'react'
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Tabs} from "expo-router";
 import {icons} from "../../constants";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 
 const TabIcon = ({icon,color,name,focused}) =>{
@@ -22,68 +24,65 @@ const TabIcon = ({icon,color,name,focused}) =>{
 }
 
 const TabsLayout = () => {
+
     return (
         <>
             <Tabs
-                screenOptions={{tabBarShowLabel: false,
-                                tabBarActiveTintColor:"#FFA001",
-                    tabBarInactiveTintColor:"#CDCDE0",
+                screenOptions={{
+                    tabBarShowLabel: false,
+                    tabBarActiveTintColor: "#FFA001",
+                    tabBarInactiveTintColor: "#CDCDE0",
                     tabBarStyle: {
-                    backgroundColor:"#161622",
+                        backgroundColor: "#161622",
                         borderTopWidth: 0, // to keep border between screen and tab menu
                         borderTopColor: "#232533",
-                        height:80,
+                        height: 80,
                     },
                     keyboardHidesTabBar: true,
 
                 }}
             >
                 <Tabs.Screen
-                  name="home"
-                  options={{
-                      title:`${"  "}Home`,
-                      headerShown:false,
-                      tabBarIcon:({color,focused,}) =>(
-                          <TabIcon
-                              icon={icons.home}
-                              color={color}
-                              focused={focused}
-                              name={"Home"}
-                              />
-
-                      )
-
-
-
-                  }}
-                />
-
-                <Tabs.Screen
-                    name="donate"
+                    name="home"
                     options={{
-                        title:'Donate',
-                        headerShown:false,
-                        tabBarIcon:({color,focused,}) =>(
+                        title: `${"  "}Home`,
+                        headerShown: false,
+                        tabBarIcon: ({color, focused,}) => (
                             <TabIcon
-                                icon={icons.plus}
+                                icon={icons.home}
                                 color={color}
                                 focused={focused}
-                                name={"Donate"}
+                                name={"Home"}
                             />
 
                         )
 
 
-
                     }}
+                />
+                <Tabs.Screen
+                    name= 'donate'
+                    options={{
+                        title: 'Donate',
+                        headerShown: false,
+                        tabBarIcon: ({color, focused,}) => (
+                            <TabIcon
+                                icon={icons.plus}
+                                color={color}
+                                focused={focused}
+                                name={'Donate'}
+                            />
+                        )
+
+                }}
                 />
 
                 <Tabs.Screen
                     name="profile"
                     options={{
-                        title:'Profile',
-                        headerShown:false,
-                        tabBarIcon:({color,focused,}) =>(
+                        title: 'Profile',
+                        headerShown: false,
+                        tabBarIcon: ({color, focused,}) => (
                             <TabIcon
                                 icon={icons.profile}
                                 color={color}
@@ -94,16 +93,15 @@ const TabsLayout = () => {
                         )
 
 
-
                     }}
                 />
 
                 <Tabs.Screen
                     name="report"
                     options={{
-                        title:'Report',
-                        headerShown:false,
-                        tabBarIcon:({color,focused,}) =>(
+                        title: 'Report',
+                        headerShown: false,
+                        tabBarIcon: ({color, focused,}) => (
                             <TabIcon
                                 icon={icons.report}
                                 color={color}
@@ -113,6 +111,24 @@ const TabsLayout = () => {
 
                         )
 
+
+                    }}
+                />
+
+                <Tabs.Screen
+                    name="distribute"
+                    options={{
+                        title: 'Distribute',
+                        headerShown: false,
+                        tabBarIcon: ({color, focused,}) => (
+                            <TabIcon
+                                icon={icons.upload}
+                                color={color}
+                                focused={focused}
+                                name={"Ticket"}
+                            />
+
+                        )
 
 
                     }}

@@ -29,7 +29,7 @@ const Profile = () => {
             try {
                 const email = await AsyncStorage.getItem('email');
                 console.log(email);
-                const response = await axios.get(`http://10.25.73.87:8080/Donor/email/${email}`);
+                const response = await axios.get(`http://10.25.91.116:8080/Donor/email/${email}`);
                 setProfile(response.data);
                 await asyncStorage.setItem('type', profile.loginType);
                 console.log(response.data);

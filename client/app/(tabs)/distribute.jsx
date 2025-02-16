@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, Button, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
 
-const DistributorPage = () => {
+const Distribute = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -24,10 +24,10 @@ const DistributorPage = () => {
     };
 
     return (
-        <View style={{ flex: 1, padding: 10 ,backgroundColor:"#1A1B4180"}}>
+        <View style={{ flex: 1, padding: 10 ,backgroundColor:"#1A1B4180"}} className={"h-full flex items-center justify-center"}>
             <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>Profile</Text>
-            <View style={{ borderWidth: 1, borderColor: '#ccc', borderRadius: 10, padding: 10, height: 500 }}>
-                <ScrollView>
+            <View style={{ borderWidth: 1, borderColor: '#ccc', borderRadius: 10, padding: 10, height: 500 }} className={"h-full"}>
+                <ScrollView className={"h-full"}>
                     {loading ? (
                         <Text>Loading...</Text>
                     ) : (
@@ -48,4 +48,4 @@ const DistributorPage = () => {
     );
 };
 
-export default DistributorPage;
+export default Distribute;

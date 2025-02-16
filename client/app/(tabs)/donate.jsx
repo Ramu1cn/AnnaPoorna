@@ -1,34 +1,110 @@
-import React, { useState } from "react";
-import { View, TextInput, Text, StyleSheet, Button, Image } from "react-native";
+import React, {useEffect, useState} from "react";
+import {View, TextInput, Text, StyleSheet, Button, Image, Alert} from "react-native";
 import RadioGroup from "react-native-radio-buttons-group";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import asyncStorage from "@react-native-async-storage/async-storage/src/AsyncStorage";
+import {router} from "expo-router";
+import CustomButton from "../../components/CustomButton";
 
 export default function App() {
+
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const [profile, setProfile] = useState({
+        donor_id: null,
+        fullName: '',
+        userName: '',
+        mobileNum: null,
+        streetName: '',
+        city: '',
+        district: '',
+        state: '',
+        pincode: null,
+        email: '',
+        password: '',
+        loginType: '',
+    });
+
+    const [donation, setDonation] = useState({
+        email:"",
+        address:"",
+        userName:"",
+        mobileNum:null,
+        foodPrepTime:"",
+        foodType:"",
+        quantity:0,
+        image:"",
+
+    });
+    const [loading, setLoading] = useState(false);
     const [foodType, setFoodType] = useState("");
     const [foodPrepTime, setfoodPrepTime] = useState("");
     const [address, setAddress] = useState("");
     const [lane, setLane] = useState("");
     const [street, setStreet] = useState("");
-    const [quantity, setquantity] = useState("");
+    const [quantity, setQuantity] = useState(0);
     const [imageUri, setImageUri] = useState(null); // Store selected image URI
 
     const foodOptions = [
-        { id: "1", label: "Vegetarian", value: "Vegetarian", color: "white" },
-        { id: "2", label: "Non-Vegetarian", value: "Non-Vegetarian", color: "white" },
-        { id: "3", label: "Both", value: "Both", color: "white" },
+        { id: "1", label: "Vegetarian", value: "VEG", color: "white" },
+        { id: "2", label: "Non-Vegetarian", value: "NONVEG", color: "white" },
+        { id: "3", label: "Both", value: "BOTH", color: "white" },
     ];
 
-    const handleSubmit = () => {
-        console.log("Food Type:", foodType);
-        console.log("Preparation Time:", foodPrepTime);
-        console.log("Address:", address);
-        console.log("Quantity:", quantity);
-        console.log("Street:", street);
-        console.log("Lane:", lane);
-        console.log("Image:", imageUri);
+    // const addressOfDonor = profile.streetName+" "+profile.city+" "+profile.district+" "+profile.state+" "+profile.pincode;
+    useEffect(() => {
+        const fetchProfileData = async () => {
+            try {
+                const email = await AsyncStorage.getItem('email');
+                console.log(email);
+                const response = await axios.get(`http://10.25.91.116:8080/Donor/email/${email}`);
+                setProfile(response.data);
+                setDonation({...donation , email: profile.email})
+                setDonation({...donation , address:address})
+                setDonation({...donation , mobileNum: profile.mobileNum})
+                setDonation({...donation , mobileNum: profile.mobileNum})
+                setDonation({...donation , foodPrepTime: foodPrepTime})
+                setDonation({...donation , foodType: foodType})
+                setDonation({...donation , quantity: quantity})
 
-        alert("Ticket created successfully!");
-    };
+                await asyncStorage.setItem('type', profile.loginType);
+                console.log(response.data);
+
+            } catch (err) {
+                console.log(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProfileData();
+    }, []);
+
+
+    const handleSubmit = async () => {
+        setIsSubmitting(true);
+
+        try {
+            const response = await axios.post("http://10.25.91.116:8080/Donation", donation);
+            if (response.status === 200) {
+                Alert.alert("Ticket created successfully");
+            } else {
+                Alert.alert("Ticket creation failed.");
+            }
+        } catch (error) {
+            if (error.response && error.response.status === 401) {
+                console.log(error.message);
+            } else {
+                console.log('Error:', error.message);
+            }
+
+        } finally {
+            setIsSubmitting(false);
+        }
+    }
+
 
     // Function to pick image from camera
     const openCamera = () => {
@@ -57,7 +133,7 @@ export default function App() {
     };
 
     return (
-        <View style={styles.container}>
+        <View style={styles.container} >
             <Text style={[styles.label, { fontFamily: "Lobster", fontSize: 30 }]}>Enter Food Details:</Text>
 
             {/* Food Type Radio Buttons */}
@@ -88,7 +164,7 @@ export default function App() {
                 style={styles.input}
                 placeholder="Quantity"
                 value={quantity}
-                onChangeText={(text) => setquantity(text)}
+                onChangeText={(text) => setQuantity(parseInt(text,10))}
             />
 
             <TextInput
@@ -121,7 +197,12 @@ export default function App() {
             )}
 
             {/* Submit Button */}
-            <Button title="Create Ticket" onPress={handleSubmit} />
+            <CustomButton
+                title={"Create Ticket"}
+                handlePress={handleSubmit}
+                containerStyles={"mt-7 w-[98%] bg-green"}
+                isLoading={isSubmitting}
+            />
         </View>
     );
 }

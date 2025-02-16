@@ -8,8 +8,9 @@ import {
     ActivityIndicator,
     Image,
 } from "react-native";
+import AppBar from "../../components/AppBar";
 
-const App = () => {
+const Home = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -31,9 +32,10 @@ const App = () => {
     }, []);
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={styles.container} className={"mt-10 flex"}>
             {/* Box1 with nested boxes */}
-            <View style={styles.box1}>
+            <AppBar />
+            <View style={styles.box1} className={"flex flex-row items-center justify-center"}>
                 <View style={[styles.nestedBox, styles.topLeft]}>
                     <Text style={styles.titleText}>Donations</Text>
                     <Text style={styles.valueText}>105</Text>
@@ -60,11 +62,11 @@ const App = () => {
             </View>
 
             {/* Box2 with fetched data */}
-            <View style={styles.box}>
+            <View style={styles.box} className={'w-full'}>
                 {loading ? (
                     <ActivityIndicator size="large" color="#00ff00" />
                 ) : (
-                    <ScrollView style={styles.scrollView}>
+                    <ScrollView style={styles.scrollView} className={"   "}>
                         {data.map((item) => (
                             <View key={item.id} style={styles.card}>
                                 <Text style={styles.title}>{item.title}</Text>
@@ -89,6 +91,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
         borderRadius: 20,
         marginHorizontal: 20,
+        marginBottom:40,
         padding: 10,
         flexDirection: "row", // Enables row layout
         flexWrap: "wrap", // Allows wrapping to the next row
@@ -118,6 +121,8 @@ const styles = StyleSheet.create({
     },
     scrollView: {
         flex: 1,
+        height: "150%",
+        marginTop:-20,
     },
     card: {
         backgroundColor: "#fff",
@@ -128,7 +133,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         shadowRadius: 4,
-        elevation: 2,
+        elevation: 20,
     },
     title: {
         fontSize: 18,
@@ -158,4 +163,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default App;
+export default Home;

@@ -30,12 +30,17 @@ const SignIn = () => {
 
         try {
             // logic for api call to the backend
-            const response = await axios.post("http://10.25.73.87:8080/Signin", form);
+            const response = await axios.post("http://10.25.91.116:8080/Signin", form);
             console.log(response.data)
             // 1:57:49 has the details to update it to globalContext details to remember user login
             // set it to global state
+            const userData = await axios.get(`http://10.25.91.116:8080/Donor/email/${form.email}`);
             await AsyncStorage.setItem('email',form.email);
             await AsyncStorage.setItem('password',form.password);
+            console.log(userData.data);
+
+            await AsyncStorage.setItem('username',userData.data.userName);
+            await AsyncStorage.setItem('type',userData.data.loginType);
 
             router.replace("/home");
         } catch (error) {
