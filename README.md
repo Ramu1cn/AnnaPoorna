@@ -2,6 +2,11 @@
 AnnaPoorna Food App is an NGO initiative app which focuses on distributing the excess food to the needed people.
 This is to check the branch.
 
+* user can login using email and password.
+* otherwise users can signup with necessary details.
+* In home page he has dashboard about his donations, rank and Quantity.
+* 
+
 ## Donate Screen
 ![Donate screen](https://github.com/user-attachments/assets/d402dd0d-8950-4d18-8bbe-3e991a4e3a61)
 ##
@@ -46,6 +51,12 @@ Since The server is local , so i'm keeping screen shots of the app.
 4)  execute npm install and npx expo start
 5)  download expo go app and scan the QR code 
 
+
+## Contributions
+
+Sravan : Home Page, Ticket page, donate page 
+Ramu CN : Landing page, Profile Page, Sign in page, Sign up page, Report page.
+Ram Krishna : Backend code ( Donor, Donation etc along with authentication.)
 
 
 
