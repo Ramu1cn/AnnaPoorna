@@ -5,19 +5,20 @@ import {images} from "../../constants";
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
 import {Link, router} from "expo-router";
+import axios, {formToJSON} from "axios";
 
 const SignUp = () => {
     const [form, setForm] = useState(
         {
-            fullname:"",
-            username: "",
-            mobilenumber:"",
-            street:"",
+            fullName:"",
+            userName: "",
+            mobileNum:0,
+            streetName:"",
             city:"",
             district:"",
             state:"",
-            pincode:"",
-            type:"",
+            pincode:0,
+            loginType:"",
             email:'',
             password:'',
         }
@@ -26,25 +27,40 @@ const SignUp = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
 
-    const submit = ()=>{
+    const submit = async () => {
 
-        if(!form.username || !form.fullname || !form.password || !form.city
-            || !form.district || !form.street || !form.mobilenumber || !form.state || !form.pincode ||
-        !form.type || !form.email || !form.password){
+        if (!form.userName || !form.fullName || !form.password || !form.city
+            || !form.district || !form.streetName || !form.mobileNum || !form.state || !form.pincode ||
+            !form.loginType || !form.email || !form.password) {
 
-            Alert.alert("Error","Please fill all the fields.");
+            Alert.alert("Error", "Please fill all the fields.");
         }
 
         setIsSubmitting(true);
 
-        try{
+        try {
             // logic for api call to the backend
+            setForm({...form , mobileNum: parseInt(form.mobileNum,10)})
+            setForm({...form , pincode: parseInt(form.pincode,10)})
 
-            // set it to global state
-            router.replace("/home");
-        }catch(error){
-            Alert.alert("Error",error.message);
-        }finally{
+            const response = await axios.post("http://10.25.91.116:8080/signup", form);
+            if (response.status === 200) {
+                // set it to global state
+                router.replace("/sign-in");
+            }else{
+                Alert.alert("Error", "Something went wrong , check your credentials.!");
+                router.replace("/sign-in");
+            }
+        } catch (error) {
+            if (error.response && error.response.status === 401) {
+                console.log('Unauthorized! Redirecting to login...');
+                Alert.alert("Error", "Something went wrong , check your credentials.!");
+                router.replace("/sign-in");
+            } else {
+                console.log('Error:', error.message);
+            }
+
+        } finally {
             setIsSubmitting(false);
         }
     }
@@ -63,29 +79,29 @@ const SignUp = () => {
 
                     <FormField
                         title="Full Name"
-                        value={form.fullname}
-                        handleChangeText={(e)=>setForm({...form, fullname:e})}
+                        value={form.fullName}
+                        handleChangeText={(e)=>setForm({...form, fullName:e})}
                         otherStyles="mt-10"
                     />
 
                     <FormField
-                        title="Username"
-                        value={form.username}
-                        handleChangeText={(e)=>setForm({...form, username:e})}
+                        title="userName"
+                        value={form.userName}
+                        handleChangeText={(e)=>setForm({...form, userName:e})}
                         otherStyles="mt-7"
                     />
 
                     <FormField
                         title="Mobile Number"
-                        value={form.mobilenumber}
-                        handleChangeText={(e)=>setForm({...form, mobilenumber:e})}
+                        value={form.mobileNum}
+                        handleChangeText={(e)=>setForm({...form, mobileNum:e})}
                         otherStyles="mt-10"
                     />
 
                     <FormField
-                        title="Street No./Street Name"
-                        value={form.street}
-                        handleChangeText={(e)=>setForm({...form, street:e})}
+                        title="streetName No./streetName Name"
+                        value={form.streetName}
+                        handleChangeText={(e)=>setForm({...form, streetName:e})}
                         otherStyles="mt-10"
                     />
 
@@ -118,9 +134,9 @@ const SignUp = () => {
                     />
 
                     <FormField
-                        title="Type"
-                        value={form.type}
-                        handleChangeText={(e)=>setForm({...form, type:e})}
+                        title="loginType"
+                        value={form.loginType}
+                        handleChangeText={(e)=>setForm({...form, loginType:e})}
                         otherStyles="mt-10"
                     />
 
@@ -129,7 +145,7 @@ const SignUp = () => {
                         value={form.email}
                         handleChangeText={(e)=>setForm({...form, email:e})}
                         otherStyles="mt-7"
-                        keyboardType="email-address"
+                        keyboardloginType="email-address"
                     />
 
                     <FormField

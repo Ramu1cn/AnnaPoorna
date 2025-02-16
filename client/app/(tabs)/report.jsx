@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import {View, Text, TextInput, TouchableOpacity, Alert, SafeAreaView, ScrollView} from 'react-native';
-import Toast from "react-native-toast-message";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {router} from "expo-router";
 
 
 const Report = () => {
@@ -29,7 +31,17 @@ const Report = () => {
     const handleDeleteAccount = () => {
         Alert.alert('Delete Account', 'This action is irreversible. Are you sure?', [
             { text: 'Cancel', style: 'cancel' },
-            { text: 'Confirm', onPress: () => Alert.alert('Account Deleted', 'Your account has been deleted.') },
+            { text: 'Confirm', onPress: async () => {
+                    try {
+                        const user = await AsyncStorage.getItem('email');
+                        const password = await AsyncStorage.getItem('password');
+                        const response = await axios.delete(`http://10.25.73.87:8080/Donor/delete/${user}/${password}`);
+                        router.replace("/sign-in");
+
+                    } catch (err) {
+                        console.log(err.message);
+                    }
+                } },
         ]);
     };
 
