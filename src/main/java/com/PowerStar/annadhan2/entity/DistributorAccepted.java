@@ -28,9 +28,9 @@ public class DistributorAccepted {
     private Donation.FoodType foodType;
 
     public enum FoodType {
-        ACTIVE,
-        INACTIVE,
-        PENDING
+        VEG,       // Active changed to Veg
+        NONVEG,    // Inactive changed to NonVeg
+        BOTH       // Pending changed to Both
     }
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "Distributors_id")

@@ -13,5 +13,6 @@ public interface DonorRepository extends JpaRepository<Donor, Long> {
 
     Optional<Donor> findByUserNameAndPassword(String userName, String password);
 
+    Optional<Donor> findByEmailAndPassword(String email, String password);
 
 }

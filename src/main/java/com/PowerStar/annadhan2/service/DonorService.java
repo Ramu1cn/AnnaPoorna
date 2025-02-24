@@ -8,7 +8,7 @@ public interface DonorService {
 
     public DonorDto getByUserName(String userName);
 
-    public boolean validateDonor(String userName, String password);
+    public boolean validateDonor(String email, String password);
 
     public boolean deleteDonorByUsernameAndPassword(String username, String password);
 

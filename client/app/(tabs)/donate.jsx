@@ -1,146 +1,101 @@
-import React, {useEffect, useState} from "react";
-import {View, TextInput, Text, StyleSheet, Button, Image, Alert} from "react-native";
-import RadioGroup from "react-native-radio-buttons-group";
-import { launchCamera, launchImageLibrary } from "react-native-image-picker";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useState } from "react";
+import {
+    View,
+    TextInput,
+    Text,
+    StyleSheet,
+    Button,
+    Image,
+    Alert
+} from "react-native";
+import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
-import asyncStorage from "@react-native-async-storage/async-storage/src/AsyncStorage";
-import {router} from "expo-router";
 import CustomButton from "../../components/CustomButton";
+import RadioGroup from "react-native-radio-buttons-group";
 
-export default function App() {
-
+export default function DonateScreen() {
     const [isSubmitting, setIsSubmitting] = useState(false);
-
-    const [profile, setProfile] = useState({
-        donor_id: null,
-        fullName: '',
-        userName: '',
-        mobileNum: null,
-        streetName: '',
-        city: '',
-        district: '',
-        state: '',
-        pincode: null,
-        email: '',
-        password: '',
-        loginType: '',
-    });
-
-    const [donation, setDonation] = useState({
-        email:"",
-        address:"",
-        userName:"",
-        mobileNum:null,
-        foodPrepTime:"",
-        foodType:"",
-        quantity:0,
-        image:"",
-
-    });
-    const [loading, setLoading] = useState(false);
-    const [foodType, setFoodType] = useState("");
-    const [foodPrepTime, setfoodPrepTime] = useState("");
+    const [foodPrepTime, setFoodPrepTime] = useState("");
     const [address, setAddress] = useState("");
-    const [lane, setLane] = useState("");
-    const [street, setStreet] = useState("");
-    const [quantity, setQuantity] = useState(0);
-    const [imageUri, setImageUri] = useState(null); // Store selected image URI
+    const [userName, setUserName] = useState("");
+    const [place, setPlace] = useState("");
+    const [quantity, setQuantity] = useState("");
+    const [imageUri, setImageUri] = useState(null);
 
-    const foodOptions = [
-        { id: "1", label: "Vegetarian", value: "VEG", color: "white" },
-        { id: "2", label: "Non-Vegetarian", value: "NONVEG", color: "white" },
-        { id: "3", label: "Both", value: "BOTH", color: "white" },
+    const [foodType, setFoodType] = useState("VEG");
+    const foodTypeOptions = [
+        { id: "VEG", label: "VEG", value: "VEG", color: "#4CAF50" },
+        { id: "NONVEG", label: "NONVEG", value: "NONVEG", color: "#F44336" },
+        { id: "BOTH", label: "BOTH", value: "BOTH", color: "#FF9800" }
     ];
 
-    // const addressOfDonor = profile.streetName+" "+profile.city+" "+profile.district+" "+profile.state+" "+profile.pincode;
-    useEffect(() => {
-        const fetchProfileData = async () => {
-            try {
-                const email = await AsyncStorage.getItem('email');
-                console.log(email);
-                const response = await axios.get(`http://10.25.91.116:8080/Donor/email/${email}`);
-                setProfile(response.data);
-                setDonation({...donation , email: profile.email})
-                setDonation({...donation , address:address})
-                setDonation({...donation , mobileNum: profile.mobileNum})
-                setDonation({...donation , mobileNum: profile.mobileNum})
-                setDonation({...donation , foodPrepTime: foodPrepTime})
-                setDonation({...donation , foodType: foodType})
-                setDonation({...donation , quantity: quantity})
-
-                await asyncStorage.setItem('type', profile.loginType);
-                console.log(response.data);
-
-            } catch (err) {
-                console.log(err.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchProfileData();
-    }, []);
-
-
-    const handleSubmit = async () => {
-        setIsSubmitting(true);
-
-        try {
-            const response = await axios.post("http://10.25.91.116:8080/Donation", donation);
-            if (response.status === 200) {
-                Alert.alert("Ticket created successfully");
-            } else {
-                Alert.alert("Ticket creation failed.");
-            }
-        } catch (error) {
-            if (error.response && error.response.status === 401) {
-                console.log(error.message);
-            } else {
-                console.log('Error:', error.message);
-            }
-
-        } finally {
-            setIsSubmitting(false);
-        }
-    }
-
-
     // Function to pick image from camera
-    const openCamera = () => {
-        launchCamera({ mediaType: "photo", quality: 1 }, (response) => {
-            if (response.didCancel) {
-                console.log("User cancelled camera picker");
-            } else if (response.errorMessage) {
-                console.log("Camera Error: ", response.errorMessage);
-            } else {
-                setImageUri(response.assets[0].uri);
-            }
+    const openCamera = async () => {
+        let result = await ImagePicker.launchCameraAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            quality: 0.3, // Reduce size directly
         });
+
+        if (!result.canceled) {
+            setImageUri(result.assets[0].uri);
+        }
     };
 
     // Function to pick image from gallery
-    const openGallery = () => {
-        launchImageLibrary({ mediaType: "photo", quality: 1 }, (response) => {
-            if (response.didCancel) {
-                console.log("User cancelled image picker");
-            } else if (response.errorMessage) {
-                console.log("Gallery Error: ", response.errorMessage);
-            } else {
-                setImageUri(response.assets[0].uri);
-            }
+    const openGallery = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            quality: 0.2, // Reduce size directly
         });
+
+        if (!result.canceled) {
+            setImageUri(result.assets[0].uri);
+        }
+    };
+
+    // Handle submit action
+    const handleSubmit = async () => {
+        if (!address || !userName || !place || !foodPrepTime || !quantity) {
+            Alert.alert("Error", "Please fill all fields.");
+            return;
+        }
+
+        setIsSubmitting(true);
+        try {
+            const donation = {
+                email: "test@example.com",
+                 userName,
+                address,
+                place,
+                foodPrepTime,
+                foodType,
+                quantity,
+                image: imageUri
+            };
+
+            const response = await axios.post("http://10.25.85.160:8080/Donation", donation);
+            if (response.status === 200) {
+                Alert.alert("Success", "Donation ticket created successfully!");
+            } else {
+                Alert.alert("Error", "Failed to create donation ticket.");
+            }
+        } catch (error) {
+            console.log("Error:", error.message);
+            Alert.alert("Error", error.message);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
-        <View style={styles.container} >
-            <Text style={[styles.label, { fontFamily: "Lobster", fontSize: 30 }]}>Enter Food Details:</Text>
+        <View style={styles.container}>
+            <Text style={[styles.label, { fontSize: 24 }]}>Enter Food Details:</Text>
 
-            {/* Food Type Radio Buttons */}
-            <View style={styles.radioContainer}>
+            <Text style={styles.label}>Food Type:</Text>
+            <View style={styles.radioGroup}>
                 <RadioGroup
-                    radioButtons={foodOptions}
-                    onPress={(value) => setFoodType(value)}
+                    radioButtons={foodTypeOptions}
+                    onPress={setFoodType}
                     selectedId={foodType}
                     layout="row"
                 />
@@ -148,57 +103,57 @@ export default function App() {
 
             <TextInput
                 style={styles.input}
-                placeholder="Preparation Time"
+                placeholder="Preparation Time (hrs:min)"
+                placeholderTextColor="rgba(0, 0, 0, 0.5)"
                 value={foodPrepTime}
-                onChangeText={(text) => setfoodPrepTime(text)}
+                onChangeText={setFoodPrepTime}
+                keyboardType="default"
             />
+            <TextInput
+                        style={styles.input}
+                        placeholder="Enter Your USER Name"
+                        placeholderTextColor="rgba(0, 0, 0, 0.5)"
+                        value={userName}
+                        onChangeText={setUserName}
+                    />
 
             <TextInput
                 style={styles.input}
-                placeholder="Address"
+                placeholder="Address (Detailed Address)"
+                placeholderTextColor="rgba(0, 0, 0, 0.5)"
                 value={address}
-                onChangeText={(text) => setAddress(text)}
+                onChangeText={setAddress}
             />
 
             <TextInput
                 style={styles.input}
-                placeholder="Quantity"
+                placeholder="Place"
+                placeholderTextColor="rgba(0, 0, 0, 0.5)"
+                value={place}
+                onChangeText={setPlace}
+            />
+
+            <TextInput
+                style={styles.input}
+                placeholder="Quantity (in kg)"
+                placeholderTextColor="rgba(0, 0, 0, 0.5)"
                 value={quantity}
-                onChangeText={(text) => setQuantity(parseInt(text,10))}
+                onChangeText={(text) => {
+                    const numericValue = text.replace(/[^0-9]/g, ""); // Remove non-numeric characters
+                    setQuantity(numericValue);
+                }}
+                keyboardType="numeric"
             />
 
-            <TextInput
-                style={styles.input}
-                placeholder="Lane"
-                value={lane}
-                onChangeText={(text) => setLane(text)}
-            />
-
-            <TextInput
-                style={styles.input}
-                placeholder="Street"
-                value={street}
-                onChangeText={(text) => setStreet(text)}
-            />
-
-            {/* Image Picker Buttons */}
             <View style={styles.buttonContainer}>
-                <View style={{ marginRight: 10 }}>
-                    <Button title="Take Photo" onPress={openCamera} />
-                </View>
-                <View style={{ marginLeft: 10 }}>
-                    <Button title="Choose from Gallery" onPress={openGallery} />
-                </View>
+                <Button title="Take Photo" onPress={openCamera} />
+                <Button title="Choose from Gallery" onPress={openGallery} />
             </View>
 
-            {/* Display Selected Image */}
-            {imageUri && (
-                <Image source={{ uri: imageUri }} style={styles.image} />
-            )}
+            {imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
 
-            {/* Submit Button */}
             <CustomButton
-                title={"Create Ticket"}
+                title="Create Ticket"
                 handlePress={handleSubmit}
                 containerStyles={"mt-7 w-[98%] bg-green"}
                 isLoading={isSubmitting}
@@ -213,13 +168,12 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         padding: 20,
-        backgroundColor: "#1A1B4180",
+        backgroundColor: "#1A1B4180"
     },
     label: {
-        fontFamily: "Arial",
         fontSize: 18,
         marginBottom: 10,
-        color: "white",
+        color: "white"
     },
     input: {
         width: "80%",
@@ -229,25 +183,24 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         borderRadius: 5,
         marginBottom: 20,
-        backgroundColor: "#fff",
-        fontFamily: "Arial",
-    },
-    radioContainer: {
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-        marginBottom: 20,
+        backgroundColor: "#fff"
     },
     buttonContainer: {
         flexDirection: "row",
         justifyContent: "space-around",
         width: "80%",
-        marginBottom: 20,
+        marginBottom: 20
     },
     image: {
-        width: 200,
-        height: 200,
+        width: 150, // Smaller image size
+        height: 150,
         borderRadius: 10,
-        marginTop: 10,
+        marginTop: 10
     },
+    radioGroup: {
+        flexDirection: "row",
+        justifyContent: "space-around",
+        width: "80%",
+        marginBottom: 20
+    }
 });

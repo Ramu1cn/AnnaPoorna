@@ -69,9 +69,9 @@ public class DistributorServiceImpl implements DistributorService {
     }
 
     @Override
-    public boolean validateDistributor(String userName, String password) {
+    public boolean validateDistributor(String email, String password) {
 
-            return distributorRepository.findByUserNameAndPassword(userName, password).isPresent();
+            return distributorRepository.findByUserNameAndPassword(email, password).isPresent();
 
     }
 

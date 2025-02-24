@@ -1,6 +1,7 @@
 package com.PowerStar.annadhan2.entity;
 
 import com.PowerStar.annadhan2.DTO.DonorDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,6 +20,7 @@ public class Donation {
 
     private String address;
 
+    @Column(name = "user_name")
     private String userName;
     private String email;
     private Long mobileNum;
@@ -27,12 +29,13 @@ public class Donation {
     private FoodType foodType;
 
     public enum FoodType {
-        ACTIVE,
-        INACTIVE,
-        PENDING
+        VEG,       // Active changed to Veg
+        NONVEG,    // Inactive changed to NonVeg
+        BOTH       // Pending changed to Both
     }
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Donars_id")
+    @JsonIgnore
     private Donor donar;
 
     private List<String> items;

@@ -7,7 +7,7 @@ public interface DistributorService {
 
     public DistributorDto create(DonorDto donorDto);
 
-    public boolean validateDistributor(String userName, String password);
+    public boolean validateDistributor(String email, String password);
 
     public void deleteDistributorByUserName(String userName);
 

@@ -8,10 +8,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface DonationRepository extends JpaRepository<Donation, Long> {
+public interface   DonationRepository extends JpaRepository<Donation, Long> {
 
     List<Donation> findByDonarUserName(String userName);
 
+    List<Donation> findByUserName(String userName);
 
 
     List<Donation> findByDonar(Donor donor);

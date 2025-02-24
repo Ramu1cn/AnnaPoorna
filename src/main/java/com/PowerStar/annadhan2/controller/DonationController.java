@@ -33,7 +33,7 @@ public class DonationController {
     public ResponseEntity<List<Donation>> getDonationsByDonorId(@PathVariable String userName) {
         // Call the service to get the donations
         List<Donation> donations = donationaService.getDonationsByDonoruserName(userName);
-
+         System.out.print("Came to controller");
         return ResponseEntity.ok(donations);
     }
 }

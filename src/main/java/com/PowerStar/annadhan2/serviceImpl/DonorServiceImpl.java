@@ -101,8 +101,8 @@ public class DonorServiceImpl implements DonorService {
     }
 
     @Override
-    public boolean validateDonor(String userName, String password) {
-        return donorRepository.findByUserNameAndPassword(userName, password).isPresent();
+    public boolean validateDonor(String email, String password) {
+        return donorRepository.findByEmailAndPassword(email, password).isPresent();
 
     }
 

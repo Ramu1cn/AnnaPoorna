@@ -1,54 +1,61 @@
-import {View, Text, ScrollView, Image, Alert} from 'react-native'
-import React, {useState} from 'react'
-import {SafeAreaView} from "react-native-safe-area-context";
-import {images} from "../../constants";
+import { View, Text, ScrollView, Image, Alert } from 'react-native';
+import React, { useState } from 'react';
+import { SafeAreaView } from "react-native-safe-area-context";
+import { images } from "../../constants";
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
-import {Link, router} from "expo-router";
+import { Link, router } from "expo-router";
 import axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignIn = () => {
-    const [form, setForm] = useState(
-        {
-            email:'',
-            password:'',
-        }
-    );
+    const [form, setForm] = useState({
+        email: '',
+        password: '',
+    });
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-
     const submit = async () => {
-
         if (!form.email || !form.password) {
-
             Alert.alert("Error", "Please fill all the fields.");
+            return;
         }
 
         setIsSubmitting(true);
 
         try {
-            // logic for api call to the backend
-            const response = await axios.post("http://10.25.91.116:8080/Signin", form);
-            console.log(response.data)
-            // 1:57:49 has the details to update it to globalContext details to remember user login
-            // set it to global state
-            const userData = await axios.get(`http://10.25.91.116:8080/Donor/email/${form.email}`);
-            await AsyncStorage.setItem('email',form.email);
-            await AsyncStorage.setItem('password',form.password);
-            console.log(userData.data);
+            // Make the API request to the backend
+            const response = await axios.post('http://10.25.85.160:8080/Signin', form);
 
-            await AsyncStorage.setItem('username',userData.data.userName);
-            await AsyncStorage.setItem('type',userData.data.loginType);
+            // Check if the response is successful
+            if (response.status === 200) {
+                const responseData = response.data;
+                console.log(responseData); // Log response for debugging
 
-            router.replace("/home");
+                // Save user data to AsyncStorage
+                await AsyncStorage.setItem('email', form.email);
+                await AsyncStorage.setItem('password', form.password);
+
+                // Navigate based on response
+                if (responseData.includes("Sign-in successful Donor")) {
+                    router.replace("/home");
+                } else if (responseData.includes("Sign-in successful")) {
+                    router.replace("/home");
+                } else {
+                    Alert.alert("Error", "Invalid credentials.");
+                }
+            } else {
+                Alert.alert("Error", "Invalid credentials.");
+            }
+
         } catch (error) {
             Alert.alert("Error", error.message);
         } finally {
             setIsSubmitting(false);
         }
-    }
+    };
+
     return (
         <SafeAreaView className={"bg-primary h-full"}>
             <ScrollView>
@@ -65,7 +72,7 @@ const SignIn = () => {
                     <FormField
                         title="Email"
                         value={form.email}
-                        handleChangeText={(e)=>setForm({...form, email:e})}
+                        handleChangeText={(e) => setForm({ ...form, email: e })}
                         otherStyles="mt-7"
                         keyboardType="email-address"
                     />
@@ -73,7 +80,7 @@ const SignIn = () => {
                     <FormField
                         title="Password"
                         value={form.password}
-                        handleChangeText={(e)=>setForm({...form, password:e})}
+                        handleChangeText={(e) => setForm({ ...form, password: e })}
                         otherStyles="mt-7"
                     />
 
@@ -84,17 +91,19 @@ const SignIn = () => {
                         isLoading={isSubmitting}
                     />
 
-                    <View className={"justify-center pt-5 flex-row gap-2 "}>
+                    <View className={"justify-center pt-5 flex-row gap-2"}>
                         <Text className={"text-lg text-gray-100 font-pregular"}>
                             Don't have an account?
                         </Text>
-                        
-                        <Link href={"/sign-up"} className={"text-lg font-semibold text-secondary "}>Sign Up</Link>
-                    </View>
 
+                        <Link href={"/sign-up"} className={"text-lg font-semibold text-secondary"}>
+                            Sign Up
+                        </Link>
+                    </View>
                 </View>
             </ScrollView>
         </SafeAreaView>
-    )
-}
-export default SignIn
+    );
+};
+
+export default SignIn;

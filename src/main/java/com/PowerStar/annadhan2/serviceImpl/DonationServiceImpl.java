@@ -112,10 +112,26 @@ public class DonationServiceImpl implements DonationaService {
                 .orElseThrow(() -> new RuntimeException("Donor not found"));
 
         Long id = donor.getId();
-        List<Donation> donations = donationRepository.findByDonarUserName(userName);
+        List<Donation> donations = donationRepository.findByUserName(userName);
+        System.out.print("donataions table is called");
         return donations;
 
     }
+
+
+//    public List<Donation> getDonationsByDonoruserName(String userName) {
+//        // Fetch donations by username
+//        List<Donation> donations = donationRepository.findByDonarUserName(userName);
+//
+//        // If no donations exist, throw an exception
+//        if (donations.isEmpty()) {
+//            throw new RuntimeException("Username not found in donation table");
+//        }
+//
+//        return donations;
+//    }
+
+
 
 
     public void deleteDonationsByDonor(Donor donor) {

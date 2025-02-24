@@ -19,8 +19,8 @@ public class SignInController {
     private DistributorService distributorService;
     @PostMapping
     public ResponseEntity<String> signin(@RequestBody SignIn signinRequest) {
-        boolean isValiddonor = donorService.validateDonor(signinRequest.getUserName(), signinRequest.getPassword());
-        boolean isValiddistributor = distributorService.validateDistributor(signinRequest.getUserName(), signinRequest.getPassword());
+        boolean isValiddonor = donorService.validateDonor(signinRequest.getEmail(), signinRequest.getPassword());
+        boolean isValiddistributor = distributorService.validateDistributor(signinRequest.getEmail(), signinRequest.getPassword());
 
         if (isValiddonor ) {
             return ResponseEntity.ok("Sign-in successful Donor");

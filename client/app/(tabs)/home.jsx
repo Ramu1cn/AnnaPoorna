@@ -1,42 +1,40 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
     View,
     Text,
     StyleSheet,
     SafeAreaView,
     ScrollView,
-    ActivityIndicator,
     Image,
+    TouchableOpacity,
 } from "react-native";
-import AppBar from "../../components/AppBar";
+import { useNavigation } from "@react-navigation/native";
+import Icon from "react-native-vector-icons/Ionicons";
 
 const Home = () => {
-    const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(true);
-
-    // Fetch data from the backend
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch("https://jsonplaceholder.typicode.com/posts"); // Example API
-                const result = await response.json();
-                setData(result.slice(0, 20)); // Fetch the first 20 items for simplicity
-                setLoading(false);
-            } catch (error) {
-                console.error("Error fetching data:", error);
-                setLoading(false);
-            }
-        };
-
-        fetchData();
-    }, []);
+    const navigation = useNavigation();
 
     return (
-        <SafeAreaView style={styles.container} className={"mt-10 flex"}>
-            {/* Box1 with nested boxes */}
-            <AppBar />
-            <View style={styles.box1} className={"flex flex-row items-center justify-center"}>
-                <View style={[styles.nestedBox, styles.topLeft]}>
+        <SafeAreaView style={styles.container}>
+            {/* App Bar */}
+            <View style={styles.appBar}>
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('About')}
+                    style={styles.aboutButton}
+                >
+                    <Text style={styles.buttonText}>About Us</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => navigation.navigate("AboutApp")}
+                    style={styles.profileButton}
+                >
+                    <Icon name="settings-outline" size={24} color="#FFFFFF" />
+                </TouchableOpacity>
+            </View>
+
+            {/* Stats Section */}
+            <View style={styles.box1}>
+                <View style={[styles.nestedBox]}>
                     <Text style={styles.titleText}>Donations</Text>
                     <Text style={styles.valueText}>105</Text>
                 </View>
@@ -51,39 +49,64 @@ const Home = () => {
                         <Text style={styles.valueText}>5</Text>
                     </View>
                 </View>
-                <View style={[styles.nestedBox, styles.bottomLeft]}>
+                <View style={[styles.nestedBox]}>
                     <Text style={styles.titleText}>Quantity</Text>
                     <Text style={styles.valueText}>50</Text>
                 </View>
-                <View style={[styles.nestedBox, styles.bottomRight]}>
+                <View style={[styles.nestedBox]}>
                     <Text style={styles.titleText}>People</Text>
                     <Text style={styles.valueText}>80</Text>
                 </View>
             </View>
 
-            {/* Box2 with fetched data */}
-            <View style={styles.box} className={'w-full'}>
-                {loading ? (
-                    <ActivityIndicator size="large" color="#00ff00" />
-                ) : (
-                    <ScrollView style={styles.scrollView} className={"   "}>
-                        {data.map((item) => (
-                            <View key={item.id} style={styles.card}>
-                                <Text style={styles.title}>{item.title}</Text>
-                            </View>
-                        ))}
-                    </ScrollView>
-                )}
+            {/* Donation History Section */}
+            <View style={styles.box}>
+                <Text style={styles.contributionText}>Your Contributions</Text>
+                <ScrollView style={styles.scrollView}>
+                    {[...Array(10)].map((_, index) => (
+                        <View key={index} style={styles.card}>
+                            <Text style={styles.transparentText}>History</Text>
+                        </View>
+                    ))}
+                </ScrollView>
             </View>
         </SafeAreaView>
     );
 };
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "#1A1B4180",
         paddingHorizontal: 16,
+    },
+    appBar: {
+        height: 60,
+        backgroundColor: "#1E1E2D",
+        flexDirection: "row",
         justifyContent: "space-between",
+        alignItems: "center",
+        paddingHorizontal: 20,
+        marginTop: 20,
+        paddingTop: 15,
+        borderRadius: 8,
+        width: "100%",
+    },
+    profileButton: {
+        backgroundColor: "#00A5FF",
+        paddingVertical: 8,
+        paddingHorizontal: 12,
+        borderRadius: 8,
+    },
+    aboutButton: {
+        backgroundColor: "#00A5FF",
+        paddingVertical: 8,
+        paddingHorizontal: 12,
+        borderRadius: 8,
+    },
+    buttonText: {
+        color: "#FFFFFF",
+        fontWeight: "bold",
     },
     box1: {
         flex: 0.35,
@@ -91,54 +114,54 @@ const styles = StyleSheet.create({
         marginTop: 20,
         borderRadius: 20,
         marginHorizontal: 20,
-        marginBottom:40,
+        marginBottom: 40,
         padding: 10,
-        flexDirection: "row", // Enables row layout
-        flexWrap: "wrap", // Allows wrapping to the next row
-        justifyContent: "space-around", // Adds space between boxes
+        flexDirection: "row",
+        flexWrap: "wrap",
+        justifyContent: "space-around",
     },
     nestedBox: {
-        width: "35%", // Reduced size to 70% of the original
-        aspectRatio: 1.7, // Ensures the box is square
+        width: "45%",
+        aspectRatio: 1.7,
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#333333",
         borderWidth: 2,
         borderColor: "#D1D1D1",
         borderRadius: 10,
-        margin: 5, // Adds spacing between boxes
+        margin: 5,
     },
     box: {
-        flex: 0.6,
-        backgroundColor: "#e0e0e0",
+        flex: 0.8,
+        backgroundColor: "transparent",
         borderRadius: 10,
         marginTop: 40,
-        shadowColor: "#000",
-        shadowOffset: { width: 4, height: 4 },
-        shadowOpacity: 0.2,
-        shadowRadius: 15,
         marginBottom: 30,
+        alignItems: "center",
     },
     scrollView: {
         flex: 1,
-        height: "150%",
-        marginTop:-20,
+        height: "180%",
+        width: "100%",
+        marginTop: -20,
     },
     card: {
-        backgroundColor: "#fff",
+        backgroundColor: "rgba(255, 255, 255, 0.3)",
         padding: 16,
         marginBottom: 10,
         borderRadius: 10,
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 4,
         elevation: 20,
     },
-    title: {
+    transparentText: {
         fontSize: 18,
         fontWeight: "bold",
-        color: "#555",
+        color: "rgba(255, 255, 255, 0.5)",
+    },
+    contributionText: {
+        fontSize: 20,
+        fontWeight: "bold",
+        color: "rgba(255, 255, 255, 0.8)",
+        marginBottom: 10,
     },
     titleText: {
         fontSize: 18,

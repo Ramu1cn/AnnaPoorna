@@ -12,6 +12,9 @@ public interface DistributorRepository extends JpaRepository<Distributor, Long> 
 
     Optional<Distributor> findByUserName(String userName);
 
-    Optional<Distributor> findByUserNameAndPassword(String userName, String password);
+    Optional<Distributor> findByUserNameAndPassword(String email, String password);
+
+    Optional<Distributor> findByEmailAndPassword(String email, String password);
+
 
 }
