@@ -6,7 +6,7 @@ const About = () => {
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         <Text style={styles.title}>About Us</Text>
-        <Text style={styles.text}>
+        <Text>
           This is the About Us page where you can add information about your app, company, or anything else.
         </Text>
       </View>

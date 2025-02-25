@@ -43,11 +43,8 @@ const Home = () => {
         <TouchableOpacity onPress={openAboutModal} style={styles.aboutButton}>
           <Text style={styles.buttonText}>About Us</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={openAboutAppModal}
-          style={styles.profileButton}
-        >
-          <Icon name="settings-outline" size={24} color="#FFFFFF" />
+  <TouchableOpacity onPress={openAboutAppModal} style={styles.aboutButton}>
+          <Text style={styles.buttonText}>About App</Text>
         </TouchableOpacity>
       </View>
 
