@@ -29,11 +29,10 @@ export default function DonateScreen() {
         { id: "BOTH", label: "BOTH", value: "BOTH", color: "#FF9800" }
     ];
 
-    // Function to pick image from camera
     const openCamera = async () => {
         let result = await ImagePicker.launchCameraAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            quality: 0.3, // Reduce size directly
+            quality: 0.3,
         });
 
         if (!result.canceled) {
@@ -41,11 +40,10 @@ export default function DonateScreen() {
         }
     };
 
-    // Function to pick image from gallery
     const openGallery = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            quality: 0.2, // Reduce size directly
+            quality: 0.2,
         });
 
         if (!result.canceled) {
@@ -53,7 +51,6 @@ export default function DonateScreen() {
         }
     };
 
-    // Handle submit action
     const handleSubmit = async () => {
         if (!address || !userName || !place || !foodPrepTime || !quantity) {
             Alert.alert("Error", "Please fill all fields.");
@@ -64,7 +61,7 @@ export default function DonateScreen() {
         try {
             const donation = {
                 email: "test@example.com",
-                 userName,
+                userName,
                 address,
                 place,
                 foodPrepTime,
@@ -76,6 +73,13 @@ export default function DonateScreen() {
             const response = await axios.post("http://10.25.85.160:8080/Donation", donation);
             if (response.status === 200) {
                 Alert.alert("Success", "Donation ticket created successfully!");
+                setFoodPrepTime("");
+                setAddress("");
+                setUserName("");
+                setPlace("");
+                setQuantity("");
+                setImageUri(null);
+                setFoodType("VEG");
             } else {
                 Alert.alert("Error", "Failed to create donation ticket.");
             }
@@ -103,19 +107,19 @@ export default function DonateScreen() {
 
             <TextInput
                 style={styles.input}
-                placeholder="Preparation Time (hrs:min)"
+                placeholder="Food Prepared Time (hrs:min)"
                 placeholderTextColor="rgba(0, 0, 0, 0.5)"
                 value={foodPrepTime}
                 onChangeText={setFoodPrepTime}
                 keyboardType="default"
             />
             <TextInput
-                        style={styles.input}
-                        placeholder="Enter Your USER Name"
-                        placeholderTextColor="rgba(0, 0, 0, 0.5)"
-                        value={userName}
-                        onChangeText={setUserName}
-                    />
+                style={styles.input}
+                placeholder="** UNIQUE USER Name**"
+                placeholderTextColor="rgba(0, 0, 0, 0.5)"
+                value={userName}
+                onChangeText={setUserName}
+            />
 
             <TextInput
                 style={styles.input}
@@ -139,7 +143,7 @@ export default function DonateScreen() {
                 placeholderTextColor="rgba(0, 0, 0, 0.5)"
                 value={quantity}
                 onChangeText={(text) => {
-                    const numericValue = text.replace(/[^0-9]/g, ""); // Remove non-numeric characters
+                    const numericValue = text.replace(/[^0-9]/g, "");
                     setQuantity(numericValue);
                 }}
                 keyboardType="numeric"
@@ -147,6 +151,7 @@ export default function DonateScreen() {
 
             <View style={styles.buttonContainer}>
                 <Button title="Take Photo" onPress={openCamera} />
+                <View style={{ width: 20 }} />
                 <Button title="Choose from Gallery" onPress={openGallery} />
             </View>
 
@@ -192,7 +197,7 @@ const styles = StyleSheet.create({
         marginBottom: 20
     },
     image: {
-        width: 150, // Smaller image size
+        width: 150,
         height: 150,
         borderRadius: 10,
         marginTop: 10

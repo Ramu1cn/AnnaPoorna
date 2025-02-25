@@ -10,8 +10,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignIn = () => {
     const [form, setForm] = useState({
-        email: '',
-        password: '',
+        email: 'ramu@gmail.com',
+        password: '123456',
     });
 
     const [isSubmitting, setIsSubmitting] = useState(false);

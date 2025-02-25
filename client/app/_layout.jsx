@@ -3,6 +3,8 @@ import React, {useEffect, useState} from "react";
 import "./globals.css";
 import {useFonts} from "expo-font";
 
+ import Home from "./(tabs)/home";
+
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -42,7 +44,12 @@ export default function RootLayout() {
 
     <Stack.Screen name="(auth)" options={{headerShown: false}}  />
 
+    <Stack.Screen name="home" options={{ headerShown: false }} />  {/* Add Home screen */}
+
+
     <Stack.Screen name="(tabs)" options={{headerShown: false}}  />
+
+
 
     {/*<Stack.Screen name="/search/[query]" options={{headerShown: false}}  />*/}
   </Stack>

@@ -28,20 +28,20 @@ const Profile = () => {
             <View className={"w-full h-[50px] mt-2 flex items-center justify-center"}>
                 <Text className={"text-4xl text-secondary font-pbold"}> Profile </Text>
             </View>
-            <View className={"w-[98%] h-[160px] bg-gray-600 rounded-2xl shadow-md p-4 mt-0 flex flex-row items-center border border-gray-200 gap-[50px]"}>
+            <View className={"w-[98%] h-[160px] bg-gray-600 rounded-2xl shadow-md p-4 mt-0 flex flex-row items-center border border-gray-200 gap-[10px]"}>
                 <Image source={images.profile_photo} className={"rounded-full h-[80px] w-[80px]"} resizeMode={"contain"}/>
-                <View className={"text-white mt-6 border-0 font-bold h-[100px] w-[250px] flex items-start justify-center"}>
-                    {profile.fullName && <Text className={"text-2xl text-slate-200"}>Name : {profile.fullName}</Text>}
-                    {profile.mobileNum && <Text className={"text-2xl text-slate-200"}>Contact No : {profile.mobileNum}</Text>}
-                    {profile.email && <Text className={"text-2xl text-slate-200"}>E-mail : {profile.email}</Text>}
+                <View className={"text-white border-0 font-bold h-[100px] w-[250px] flex items-start justify-center"}>
+                    {profile.fullName && <Text className={"text-2xl text-slate-200"}><Text className="font-bold">Name:</Text> {profile.fullName}</Text>}
+                    {profile.mobileNum && <Text className={"text-2xl text-slate-200"}><Text className="font-bold">Contact No:</Text> {profile.mobileNum}</Text>}
+                    {profile.email && <Text className={"text-2xl text-slate-200"}><Text className="font-bold">E-mail:</Text> {profile.email}</Text>}
                 </View>
             </View>
+            <View className="mt-6" />
             <ScrollView className="w-full max-h-full mb-6">
                 {profile.userName && <ProfileCard title={"User Name"} value={profile.userName} style={"mt-2"}/>}
                 {profile.city && <ProfileCard title={"City"} value={profile.city} style={"mt-2"}/>}
                 {profile.state && <ProfileCard title={"State"} value={profile.state} style={"mt-2"}/>}
                 {profile.pincode && <ProfileCard title={"Pin Code"} value={profile.pincode} style={"mt-2"}/>}
-                {profile.loginType && <ProfileCard title={"Type"} value={profile.loginType} style={"mt-2"}/>}
             </ScrollView>
         </SafeAreaView>
     );

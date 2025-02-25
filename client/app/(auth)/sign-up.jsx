@@ -5,7 +5,7 @@ import {images} from "../../constants";
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
 import {Link, router} from "expo-router";
-import axios, {formToJSON} from "axios";
+import axios from "axios";
 
 const SignUp = () => {
     const [form, setForm] = useState(
@@ -18,7 +18,7 @@ const SignUp = () => {
             district:"",
             state:"",
             pincode:0,
-            loginType:"",
+            loginType:"DONOR",
             email:'',
             password:'',
         }
@@ -26,44 +26,39 @@ const SignUp = () => {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-
     const submit = async () => {
-
         if (!form.userName || !form.fullName || !form.password || !form.city
             || !form.district || !form.streetName || !form.mobileNum || !form.state || !form.pincode ||
             !form.loginType || !form.email || !form.password) {
-
             Alert.alert("Error", "Please fill all the fields.");
+            return;
         }
 
         setIsSubmitting(true);
 
         try {
-            // logic for api call to the backend
-            setForm({...form , mobileNum: parseInt(form.mobileNum,10)})
-            setForm({...form , pincode: parseInt(form.pincode,10)})
+            setForm({...form , mobileNum: parseInt(form.mobileNum,10)});
+            setForm({...form , pincode: parseInt(form.pincode,10)});
 
             const response = await axios.post("http://10.25.85.160:8080/signup", form);
             if (response.status === 200) {
-                // set it to global state
                 router.replace("/sign-in");
-            }else{
-                Alert.alert("Error", "Something went wrong , check your credentials.!");
+            } else {
+                Alert.alert("Error", "Something went wrong, check your credentials.");
                 router.replace("/sign-in");
             }
         } catch (error) {
             if (error.response && error.response.status === 401) {
-                console.log('Unauthorized! Redirecting to login...');
-                Alert.alert("Error", "Something went wrong , check your credentials.!");
+                Alert.alert("Error", "Something went wrong, check your credentials.");
                 router.replace("/sign-in");
             } else {
                 console.log('Error:', error.message);
             }
-
         } finally {
             setIsSubmitting(false);
         }
-    }
+    };
+
     return (
         <SafeAreaView className={"bg-primary h-full"}>
             <ScrollView>
@@ -85,10 +80,12 @@ const SignUp = () => {
                     />
 
                     <FormField
-                        title="userName"
+                        title="Username"
                         value={form.userName}
                         handleChangeText={(e)=>setForm({...form, userName:e})}
                         otherStyles="mt-7"
+                        placeholder="Please enter a unique username"
+                        placeholderTextColor="rgba(255, 255, 255, 0.5)"
                     />
 
                     <FormField
@@ -99,7 +96,7 @@ const SignUp = () => {
                     />
 
                     <FormField
-                        title="streetName No./streetName Name"
+                        title="Street Name"
                         value={form.streetName}
                         handleChangeText={(e)=>setForm({...form, streetName:e})}
                         otherStyles="mt-10"
@@ -134,18 +131,11 @@ const SignUp = () => {
                     />
 
                     <FormField
-                        title="loginType"
-                        value={form.loginType}
-                        handleChangeText={(e)=>setForm({...form, loginType:e})}
-                        otherStyles="mt-10"
-                    />
-
-                    <FormField
                         title="Email"
                         value={form.email}
                         handleChangeText={(e)=>setForm({...form, email:e})}
                         otherStyles="mt-7"
-                        keyboardloginType="email-address"
+                        keyboardType="email-address"
                     />
 
                     <FormField
@@ -166,13 +156,12 @@ const SignUp = () => {
                         <Text className={"text-lg text-gray-100 font-pregular"}>
                             Already have an account?
                         </Text>
-
                         <Link href={"/sign-in"} className={"text-lg font-semibold text-secondary "}>Sign In</Link>
                     </View>
-
                 </View>
             </ScrollView>
         </SafeAreaView>
-    )
-}
-export default SignUp
+    );
+};
+
+export default SignUp;
